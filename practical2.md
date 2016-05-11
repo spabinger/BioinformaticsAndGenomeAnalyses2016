@@ -64,14 +64,14 @@ __(*)__ Generate before after plots (requires R and ggplot2)
     Inside R call
     install.packages(c('reshape','gplots','gsalib'))
     
-    java -Xmx24g -jar GenomeAnalysisTK.jar -T AnalyzeCovariates -R hg19.fasta -L target.bed 
+    java -Xmx24g -jar /bcga2016/GATK-3.5/GenomeAnalysisTK.jar -T AnalyzeCovariates -R hg19.fasta -L target.bed 
     -before recal_data_table.txt -after post_recal_data_table.txt -plots recalibration_plots.pdf
 
 
 
 __(*)__ Print recalibrated reads
     
-    java -Xmx24g -jar GenomeAnalysisTK.jar -T PrintReads -R hg19.fasta -L target.bed -I dedup_rg_real.bam 
+    java -Xmx24g -jar /bcga2016/GATK-3.5/GenomeAnalysisTK.jar -T PrintReads -R hg19.fasta -L target.bed -I dedup_rg_real.bam 
     -BQSR recal_data_table.txt -o dedup_rg_real_recal.bam
 
 

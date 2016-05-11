@@ -113,6 +113,20 @@ __(*)__ VCFtools
 
     vcf-merge freebayes_tab.vcf.gz gatk_tab.vcf.gz samtools_tab.vcf.gz > vcf_tools_merged.vcf
     vcf-stats freebayes_tab.vcf.gz > freebayes_tab_stats.txt
+    
+    
+    All commands at once
+    export PERL5LIB=/bcga2016/vcftools-0.1.14/share/perl5
+    export PATH=/bcga2016/tabix-0.2.6:$PATH
+
+    cp freebayes.vcf freebayes_tab.vcf
+    bgzip freebayes_tab.vcf 
+    tabix -p vcf freebayes_tab.vcf.gz 
+    cp samtools.vcf samtools_tab.vcf
+    bgzip samtools_tab.vcf 
+    tabix -p vcf samtools_tab.vcf.gz 
+    module add vcftools-0.1.14 
+    vcf-merge samtools_tab.vcf.gz freebayes_tab.vcf.gz > merged.vcf
 
 
 
@@ -143,7 +157,10 @@ __(*)__ Questions
 #### Annovar
 __(*)__ First convert vcf into Annovar format
 
-    <annovar-path>/convert2annovar.pl -format vcf4 -includeinfo freebayes.vcf > freebayes.avinput
+    /bcga2016/annovar/convert2annovar.pl -format vcf4 -includeinfo freebayes.vcf > freebayes.avinput
+    or use
+    /bcga2016/annovar/convert2annovar.pl -format vcf4old -includeinfo merged.vcf > merged.avinput
+
 
 __(*)__ Annotate with Gene information
     

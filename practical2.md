@@ -166,6 +166,11 @@ __(*)__ Annotate with Gene information
     
     /bcga2016/annovar/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput /bcga2016/annovar/humandb/
     
+__(*)__ Download additional databases
+    /bcga2016/annovar/annotate_variation.pl -buildver hg19 -downdb -webfrom annovar ljb26_all /bcga2016/annovar/humandb/
+    ...
+    ...
+
 
 __(*)__ Annotate with Region information - ljb23
 

@@ -24,6 +24,7 @@ In this practical you will get to know basic tools for SAM/BAM manipulation and 
 ## Information
 
 * Original data from [1000 genomes](ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/data/NA10847/exome_alignment/).
+* Stop GATK "calling home" [information](http://gatkforums.broadinstitute.org/gatk/discussion/1250/what-is-phone-home-and-how-does-it-affect-me)  
 
 
 

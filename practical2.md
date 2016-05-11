@@ -34,26 +34,26 @@ __(*)__ Known indel sites are here specified as variables - either copy the whol
 
 __(*)__ Realignment target creator
 
-    java -Xmx8g -jar GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L target.bed 
+    java -Xmx8g -jar /bcga2016/GATK-3.5/GenomeAnalysisTK.jar -T RealignerTargetCreator -R hg19.fasta -nt 8 -L target.bed \
     -I deduprg.bam -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o target_intervals.list
 
 __(*)__ Perform realignment
     
-    java -Xmx8g -jar GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam 
+    java -Xmx8g -jar /bcga2016/GATK-3.5/GenomeAnalysisTK.jar -T IndelRealigner -R hg19.fasta -I deduprg.bam \
     -targetIntervals target_intervals.list -known ${KNOWN_INDELS_1} -known ${KNOWN_INDELS_2} -o dedup_rg_real.bam
 
 
 __(*)__ Base quality recalibration
     
-    java -Xmx8g -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam 
+    java -Xmx8g -jar /bcga2016/GATK-3.5/GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam \
     -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o recal_data_table.txt -L target.bed 
     --maximum_cycle_value 800
 
 
 __(*)__ Second pass of recalibration
      
-     java -Xmx8g -jar GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam 
-     -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt 
+     java -Xmx8g -jar /bcga2016/GATK-3.5/GenomeAnalysisTK.jar -T BaseRecalibrator -R hg19.fasta -I dedup_rg_real.bam \
+     -knownSites ${KNOWN_INDELS_1} -knownSites ${KNOWN_INDELS_2} -o post_recal_data_table.txt \
      -L target.bed --maximum_cycle_value 800 -BQSR recal_data_table.txt 
 
 

@@ -5,6 +5,6 @@ Tools for variant analysis of next-generation genome sequencing data
 
 **Information will be made available along the course**
 
-
+* [Lecture Notes](Lecture_Notes_2016_VariantCallingAndAnnotation.pdf)
 * [Practical 1](practical1.md)
 * [Practical 2](practical2.md)

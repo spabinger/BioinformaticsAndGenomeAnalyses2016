@@ -185,6 +185,9 @@ __(*)__ Annotate with Region information - snp138
 __(*)__ Try converting the output files back to VCF (check if the appropriate columns are selected in cut)
      
      cat <annovar.file> | cut -f 9-18
+     
+__(*)__ 
+    Use table_annovar.pl which supports VCF input and outputs annotations in VCF file
 
 __(*)__ Questions
 * Look at the annotated VCF files.

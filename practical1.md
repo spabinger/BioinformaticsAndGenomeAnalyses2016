@@ -193,6 +193,7 @@ __(*)__ Investigate result
   
     #Perform the same procedures as done for samtools
     #Do you notice differences?
+    grep -v "^#" freebayes.vcf | wc -l
 
 
 #### VarDict variant calling

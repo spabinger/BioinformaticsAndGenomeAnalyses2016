@@ -164,8 +164,8 @@ __(*)__ First convert vcf into Annovar format
 
 __(*)__ Annotate with Gene information
     
-    <annovar-path>/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput 
-    /home/stephan/bin/annovar/annovar/humandb/
+    /bcga2016/annovar/annotate_variation.pl -geneanno -buildver hg19 freebayes.avinput /bcga2016/annovar/humandb/
+    
 
 __(*)__ Annotate with Region information - ljb23
 

@@ -202,6 +202,10 @@ __(*)__ Call
 
      AF_THR="0.01" # minimum allele frequency
      /bcga2016/vardict/VarDictJava/build/install/VarDict/bin/VarDict -G hg19.fasta -f ${AF_THR} -N my_sample -b sorted.bam -z -c 1 -S 2 -E 3 -g 4 -R chr11:1-800000 | /bcga2016/vardict/VarDictJava/VarDict/teststrandbias.R | /bcga2016/vardict/VarDictJava/VarDict/var2vcf_valid.pl -N my_sample -E -f $AF_THR > vardict.vcf
+     
+     In case the software is not fully installed (just for the instructions)
+     VarDict -G hg19.fasta -f 00.1 -N my_sample -b deduprg.bam -z -c 1 -S 2 -E 3 -g 4 -R chr11:1-800000  > vardict.var
+
 
 
 #### Useful information

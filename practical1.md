@@ -53,6 +53,7 @@ __(*)__ How big is the BAM file
 
 __(*)__ Inspect the header of the BAM file
     samtools ...
+    samtools view -H aln.bam
 
 
 __(*)__ View the BAM file
@@ -64,12 +65,17 @@ __(*)__ How many reads are in the BAM file?<br/>
 Is there another way to count the reads (check the samtools view parameters - look for -v)
    
     samtools view <file.bam> | grep -v "^#" | wc -l
+    samtools flagstat <file.bam>
     
 __(*)__ Answer the following questions by investigating the SAM file
 * What version of the human assembly was used to perform the alignments?
 * What version of bwa was used to align the reads?
 * What is the name of the first read?
 * At what position does the alignment of the read start?
+
+    Use SAMtools for these questions
+    samtools view -H aln.bam | less
+    samtools view aln.bam | less
 
     
 __(*)__ Sort the BAM file
@@ -115,3 +121,99 @@ If the BAM file is too big, try to view only a subset of it<br/>
     samtools view -h sorted.bam | head -n 1000000 | samtools view -b -S - > sorted_small.bam
     
     
+  
+#### Prepare reference genome
+__(*)__ Prepare dict index
+    
+    module add picard-tools-2.2.1
+    java -jar /bcga2016/picard-tools-2.2.1/picard.jar CreateSequenceDictionary R=hg19.fasta O=hg19.dict
+
+__(*)__ Prepare fai index
+    
+    samtools faidx hg19.fasta 
+
+
+#### BAM file preparations
+__(*)__ Sort with Picard
+    
+    java -Xmx8g -jar /bcga2016/picard-tools-2.2.1/picard.jar SortSam I=aln.bam O=sorted_picard.bam SORT_ORDER=coordinate
+
+
+__(*)__ Mark duplicates
+     
+    java -Xmx8g -jar /bcga2016/picard-tools-2.2.1/picard.jar MarkDuplicates I=sorted_picard.bam O=dedup.bam M=metrics.txt
+
+
+__(*)__ Add ReadGroup
+    
+    java -Xmx8g -jar /bcga2016/picard-tools-2.2.1/picard.jar AddOrReplaceReadGroups I=dedup.bam O=deduprg.bam RGID=group1 RGLB=lib1 RGPL=illumina RGPU=unit1 RGSM=sample1
+
+
+__(*)__ Index with Picard
+    
+    java -Xmx8g -jar /bcga2016/picard-tools-2.2.1/picard.jar BuildBamIndex I=deduprg.bam O=deduprg.bam.bai VALIDATION_STRINGENCY=SILENT
+
+__(*)__ Collect insert size metrics
+    
+    module add R-3.2.4
+    java -Xmx8g -jar /bcga2016/picard-tools-2.2.1/picard.jar CollectInsertSizeMetrics I=deduprg.bam O=insertSizeHistogram.txt H=insertSizeHistogram.pdf
+    
+__(*)__ View the PDF
+    evince insertSizeHistogram.pdf
+
+
+__(*)__ Questions
+* How many reads were marked as duplicated? Look for flags.
+* What are the other sorting possibilities for SortSam?
+* Inspect the insert size metrics histogram.
+
+
+#### SAMtools variant calling
+
+__(*)__ Call
+
+     module add bcftools-1.1
+     samtools mpileup -uf hg19.fasta deduprg.bam | bcftools call -c -v -o samtools.vcf
+
+__(*)__ Investigate result
+
+    #How many variant were called
+    grep -v "^#" samtools.vcf | wc -l
+    #Print the variant that are between 1-300000 
+    awk '!/^#/ && $2 < "300000"' samtools.vcf
+
+#### FreeBayes variant calling
+
+__(*)__ Call
+
+     module add freebayes-1.0.2
+     freebayes -f hg19.fasta -t target.bed -v freebayes.vcf deduprg.bam
+
+__(*)__ Investigate result
+  
+    #Perform the same procedures as done for samtools
+    #Do you notice differences?
+
+
+#### VarDict variant calling
+
+__(*)__ Call
+
+     AF_THR="0.01" # minimum allele frequency
+     /bcga2016/vardict/VarDictJava/build/install/VarDict/bin/VarDict -G hg19.fasta -f ${AF_THR} -N my_sample -b sorted.bam -z -c 1 -S 2 -E 3 -g 4 -R chr11:1-800000 | /bcga2016/vardict/VarDictJava/VarDict/teststrandbias.R | /bcga2016/vardict/VarDictJava/VarDict/var2vcf_valid.pl -N my_sample -E -f $AF_THR > vardict.vcf
+
+
+#### Useful information
+
+
+__(*)__ Make file executable
+
+    chmod +x <file.name>
+    
+__(*)__ Extract xy from a file
+
+    grep -i "xy" <file.name>
+    
+__(*)__ Extract information from a file excluding the pattern and display the first 100 lines
+
+    grep -v "^#" <file.name> | head -n 100

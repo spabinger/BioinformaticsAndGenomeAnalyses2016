@@ -186,8 +186,13 @@ __(*)__ Try converting the output files back to VCF (check if the appropriate co
      
      cat <annovar.file> | cut -f 9-18
      
-__(*)__ 
-    Use table_annovar.pl which supports VCF input and outputs annotations in VCF file
+__(*)__ Notes
+
+Use table_annovar.pl which supports VCF input and outputs annotations in VCF file
+To create a nice human readable annovar output read the following:
+http://annovar.openbioinformatics.org/en/latest/user-guide/startup/#table_annovarpl
+
+
 
 __(*)__ Questions
 * Look at the annotated VCF files.
